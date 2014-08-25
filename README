@@ -1,0 +1,82 @@
+Will Pickard
+CS2720
+Shelby Funk
+Project 1
+07/15/2014
+
+To run: make ARGS="<filename>" run
+	tester.cpp must be used as the main method
+
+Globals for main method defined in tester.cpp
+rest of the globals are in BoardState.h
+
+
+I. Outline
+	This program implements three custom classes in addition to making heavy use of the std c++11 array, vector, and queue classes
+	These 3 custom classes are described in detail in section III. They are mentioned here:
+
+	1) BoardState.cpp - container class for a 3X3 game of tic tac toe
+	2) TreeNode.cpp - container class for a BoardState
+	3) t3Solver.cpp
+
+II. My Solution
+	Instead of using an 2D array to keep track of the game, I use 4 short ints. 
+	I keep track of the total count of x's and o's on the board. Incrementing and decrementing as needed
+	The other two ints keep track of the sums of the xs and os. To get the values of these sums, I divide the board like this:
+
+	    2^0	|  2^1	|  2^2      - Each cell gets a value of 2^n. 	
+	  ----- | -----	|-----	    - This allows me to basically use each xSum and oSum as a flag, indicating where values appear
+	    2^3	|  2^4	|  2^5      - For example: a board of xx**o*x*o, has x's at {2^0, 2^1, 2^6} and o's at {2^4, 2^8}
+	  -----	| -----	|------     - To generate the moves for a player, you simply subtract the board's total sum (xSum + oSum) from MAX_SUM (511 [2^9-1])
+	    2^6	|  2^7	|  2^8	    - From there, you take log2(remainingSum). This value will give you a number in the range [0,8], this number will be the 						greatest available cell on the board. In the example above, the first iteration will give you 7 here	
+				    - Next, perform the operation pow(2, lgResult). or 2^x where x was the value returned above. This gives you the value you 						need to add to the xSum || oSum (depending on the turn).
+				    - Continue this process while remainingSum > 0
+
+	To calculate whether or not a leaf has occured, I just use bit-wise operations. The possible wins are defined in a variable called ALL_WINS defined in BoardState.h.
+	 I loop over these values and perform the & operation with both xSum and oSum for each of these values.  
+	 I Then check to see if the result of the bitwise-and equals the original ALL_WINS value, if it does, a win has occured
+	 Ties occur when xSum + oSum == MAX_SUM (all globals in BoardState.h)
+
+	 That about sums (pun intended) how I completed this project. These is more documentation in the actual code
+	 Below I will outline a quick and dirty API
+
+III. Bad API
+	BoardState.cpp
+		-5 private variables: xSum, oSum, xCount, oCount, and outcome
+		-the first four were outlined above, outcome is simply GAME_INPROGRESS, GAME_WIN, or GAME_DRAW. Each new instance is inst. to GAME_INPROGRESS and updated accordingly 
+
+		Methods:
+			getters and setters for all vars
+			array<char,BOARD_SIZE> toArray:
+				This one is used to print the board mainly. Basically takes the xSum and oSum and makes an array of X_CELL, O_CELL, or EMPTY_CELL
+			void print:
+				This one calls toArray. It then loops through that array and builds a char array in a switch statement. Then prints it.
+			void checkOutcome:
+				This one updates the current outcome. B/c I inst. to GAME_INPROGRESS, it only updates to GAME_WIN or GAME_DRAW when those uccr.	The logic here is outlined above and in the code.
+			void clone() - clones 
+	TreeNode.cpp
+		-Keeps track of its parent and a vector of children
+		-getters and setters are its only methods
+
+	t3Solver.cpp
+		-keeps track of size (total nodes)
+		-its insert method takes two args, parentNode and childNode
+		-calls parentNode->addChild(childNode)
+		-preOrder, postOrder, levelOrder, and terminalPath
+			-These ones are pretty straight forward. The one confusing thing is that when iterating through the children vector
+				I start at the length of the vector and decrement to 0.
+				I do this to treat it like a stack because of the way that I create and add children
+				Because I perform log2 and then 2^log2, for each "player decision" I start by adding the greatest player move and decrementing down. 
+				For example, if 256 and 1 are the available spots in the current "decision", I add 256 to the vector first.
+				b/c of this, I start at the last position of the vector and go downwards to mimic the test case traversals
+		-void build(node)
+			-This does all of the heavy lifting. It recursively builds the entire tree. It will start by getting passed a root, It will call clone on that node. The clone will have the same values as the passed node. Then it determines whose turn it is. Based on the turn it will find the first available position on the board(this process is outlined in step I). build() is then called on this clone. This process continues until either GAME_WIN or GAME_DRAW occurs. 
+		
+
+
+As I said there is more documentation in the code itself but for the most part, this is how it all works. 3 container classes. BoardState uses short ints instead of arrays. 
+
+
+
+
+p.s- the build time for the 549000+ nodes is <1 second. Time stamps provided 

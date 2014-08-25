@@ -1,0 +1,19 @@
+p1:
+total 184
+-rw-r--r--. 1 ugrad  5603 Jul 15 23:18 BoardState.cpp
+-rw-r--r--. 1 ugrad  1654 Jul 15 23:18 BoardState.h
+-rw-r--r--. 1 ugrad  7352 Jul 15 23:18 BoardState.o
+-rw-r--r--. 1 ugrad   433 Jul 15 23:18 makefile
+-rw-r--r--. 1 ugrad  5024 Jul 15 23:26 README
+-rw-r--r--. 1 ugrad   823 Jul 15 23:19 rec14725
+-rw-r--r--. 1 ugrad     0 Jul 15 23:26 rec15626
+-rw-r--r--. 1 ugrad  3474 Jul 15 23:18 t3Solver.cpp
+-rw-r--r--. 1 ugrad   635 Jul 15 23:18 t3Solver.h
+-rw-r--r--. 1 ugrad 15192 Jul 15 23:18 t3Solver.o
+-rwxr-xr-x. 1 ugrad 59980 Jul 15 23:18 tester
+-rw-r--r--. 1 ugrad  3590 Jul 15 23:18 tester.cpp
+-rw-r--r--. 1 ugrad    30 Jul 15 23:18 tester.txt
+-rw-r--r--. 1 ugrad   556 Jul 15 23:18 TreeNode.cpp
+-rw-r--r--. 1 ugrad   612 Jul 15 23:18 TreeNode.h
+-rw-r--r--. 1 ugrad 47544 Jul 15 23:18 TreeNode.o
+/home/ugrads/pickard/CS2720/Projects/p1:/home/work/cs2720a
